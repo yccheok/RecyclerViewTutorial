@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by yccheok on 16/11/2015.
  */
@@ -30,6 +34,20 @@ public class MainFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        RecyclerViewDemoAdapter adapter = new RecyclerViewDemoAdapter(getDemoData());
+        mRecyclerView.setAdapter(adapter);
+
         return view;
+    }
+
+    private final List<DemoModel> getDemoData() {
+        List<DemoModel> demoData = new ArrayList<DemoModel>();
+        for (int i = 0; i < 20; i++) {
+            DemoModel model = new DemoModel();
+            model.dateTime = new Date();
+            model.label = "Test Label No. " + i;
+            demoData.add(model);
+        }
+        return new ArrayList<DemoModel>(demoData);
     }
 }
