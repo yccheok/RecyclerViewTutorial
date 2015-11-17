@@ -15,9 +15,10 @@ import java.util.List;
 /**
  * Created by yccheok on 16/11/2015.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements RecyclerViewOnItemTouchListener.OnItemClickListener {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
+    private RecyclerViewOnItemTouchListener recyclerViewOnItemTouchListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +38,9 @@ public class MainFragment extends Fragment {
         RecyclerViewDemoAdapter adapter = new RecyclerViewDemoAdapter(getDemoData());
         mRecyclerView.setAdapter(adapter);
 
+        recyclerViewOnItemTouchListener = new RecyclerViewOnItemTouchListener(this.getContext(), this);
+        mRecyclerView.addOnItemTouchListener(recyclerViewOnItemTouchListener);
+
         return view;
     }
 
@@ -49,5 +53,13 @@ public class MainFragment extends Fragment {
             demoData.add(model);
         }
         return new ArrayList<DemoModel>(demoData);
+    }
+
+    @Override
+    public void onItemClick(View childView, int position) {
+    }
+
+    @Override
+    public void onItemLongPress(View childView, int position) {
     }
 }
