@@ -68,8 +68,11 @@
     -->
 
     <item>
-        <shape >
-            <solid android:color="#ffffffff" />
+        <shape>
+            <solid android:color="#ffffe1b3" />
+            <stroke
+                android:width="1px"
+                android:color="#fff76d3c" />
             <corners android:radius="2dp" />
         </shape>
     </item>

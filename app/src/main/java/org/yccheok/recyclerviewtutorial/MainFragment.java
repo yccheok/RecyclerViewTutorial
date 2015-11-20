@@ -61,5 +61,6 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
 
     @Override
     public void onItemLongPress(View childView, int position) {
+        childView.setSelected(true);
     }
 }
