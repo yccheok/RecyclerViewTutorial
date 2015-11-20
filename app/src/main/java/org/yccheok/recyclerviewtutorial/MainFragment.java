@@ -2,9 +2,14 @@ package org.yccheok.recyclerviewtutorial;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +24,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerViewOnItemTouchListener recyclerViewOnItemTouchListener;
+    private ActionMode actionMode;
+    private RecyclerViewDemoAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +42,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecyclerViewDemoAdapter adapter = new RecyclerViewDemoAdapter(getDemoData());
+        adapter = new RecyclerViewDemoAdapter(getDemoData());
         mRecyclerView.setAdapter(adapter);
 
         recyclerViewOnItemTouchListener = new RecyclerViewOnItemTouchListener(this.getContext(), this);
@@ -57,10 +64,63 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
 
     @Override
     public void onItemClick(View childView, int position) {
+        if (actionMode == null) {
+
+        } else {
+            myToggleSelection(position);
+        }
+    }
+
+    private void myToggleSelection(int idx) {
+        adapter.toggleSelection(idx);
+        int count = adapter.getSelectedItemCount();
+        if (count <= 0) {
+            actionMode.finish();
+            return;
+        }
+        String title = getString(R.string.selected_count, count);
+        actionMode.setTitle(title);
     }
 
     @Override
     public void onItemLongPress(View childView, int position) {
-        childView.setSelected(true);
+        if (actionMode != null) {
+            return;
+        }
+
+        actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(new AnActionModeOfEpicProportions());
+        myToggleSelection(position);
+    }
+
+    private final class AnActionModeOfEpicProportions implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            MenuInflater inflater = actionMode.getMenuInflater();
+            inflater.inflate(R.menu.select_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.menu_delete:
+                    actionMode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            MainFragment.this.actionMode = null;
+            adapter.clearSelections();
+        }
     }
 }
