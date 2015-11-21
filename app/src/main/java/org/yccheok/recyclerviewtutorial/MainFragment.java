@@ -42,10 +42,11 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        adapter = new RecyclerViewDemoAdapter(getDemoData());
+        recyclerViewOnItemTouchListener = new RecyclerViewOnItemTouchListener(this.getContext(), this);
+
+        adapter = new RecyclerViewDemoAdapter(getDemoData(), recyclerViewOnItemTouchListener);
         mRecyclerView.setAdapter(adapter);
 
-        recyclerViewOnItemTouchListener = new RecyclerViewOnItemTouchListener(this.getContext(), this);
         mRecyclerView.addOnItemTouchListener(recyclerViewOnItemTouchListener);
 
         return view;
