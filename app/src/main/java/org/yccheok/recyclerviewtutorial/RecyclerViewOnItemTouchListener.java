@@ -23,6 +23,7 @@ public class RecyclerViewOnItemTouchListener implements RecyclerView.OnItemTouch
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent e) {
+        this.recyclerView = recyclerView;
         if (recyclerView != null) {
             this.childView = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (this.childView != null) {
@@ -32,6 +33,18 @@ public class RecyclerViewOnItemTouchListener implements RecyclerView.OnItemTouch
         }
 
         return false;
+    }
+
+    public void onClick(View view) {
+        RecyclerView recyclerView = this.recyclerView;
+
+        if (recyclerView != null) {
+            this.childView = view;
+            if (this.childView != null) {
+                this.childViewPosition = recyclerView.getChildAdapterPosition(childView);
+                onItemClickListener.onItemClick(childView, childViewPosition);
+            }
+        }
     }
 
     @Override
@@ -46,16 +59,19 @@ public class RecyclerViewOnItemTouchListener implements RecyclerView.OnItemTouch
 
     private class RecyclerViewGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            View childView = RecyclerViewOnItemTouchListener.this.childView;
-
-            if (childView != null && childViewPosition >= 0) {
-                onItemClickListener.onItemClick(childView, childViewPosition);
-
-                RecyclerViewOnItemTouchListener.this.childView = null;
-                RecyclerViewOnItemTouchListener.this.childViewPosition = -1;
-            }
-
+        public boolean onSingleTapConfirmed(MotionEvent e) {        	
+            // Too slow.
+            
+            //
+            //View childView = RecyclerViewOnItemTouchListener.this.childView;
+            //
+            //if (childView != null && childViewPosition >= 0) {
+            //    onItemClickListener.onItemClick(childView, childViewPosition);
+            //
+            //    RecyclerViewOnItemTouchListener.this.childView = null;
+            //    RecyclerViewOnItemTouchListener.this.childViewPosition = -1;
+            //}
+            //
             return super.onSingleTapConfirmed(e);
         }
 
@@ -74,6 +90,7 @@ public class RecyclerViewOnItemTouchListener implements RecyclerView.OnItemTouch
         }
     }
 
+    private volatile RecyclerView recyclerView = null;
     private volatile View childView = null;
     private volatile int childViewPosition = -1;
 
