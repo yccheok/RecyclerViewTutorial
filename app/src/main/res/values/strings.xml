@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RecyclerViewTutorial</string>
+    <string name="selected_count">%1$s selected</string>
 </resources>

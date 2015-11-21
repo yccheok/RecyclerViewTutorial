@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- For debug purpose -->
+    <drawable name="red">#ffff0000</drawable>
+    <drawable name="green">#ff00ff00</drawable>
+    <drawable name="blue">#ff0000ff</drawable>
+    <drawable name="orange">#fff76d3c</drawable>
+    <drawable name="purple">#ffff00ff</drawable>
 </resources>
