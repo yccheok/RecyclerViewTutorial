@@ -1,5 +1,6 @@
 package org.yccheok.recyclerviewtutorial;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.SparseBooleanArray;
@@ -17,12 +18,14 @@ import java.util.List;
 public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDemoAdapter.ListItemViewHolder> {
     private List<DemoModel> items;
     private SparseBooleanArray selectedItems;
+    private RecyclerViewOnItemTouchListener recyclerViewOnItemTouchListener;
 
-    public RecyclerViewDemoAdapter(List<DemoModel> modelData) {
+    public RecyclerViewDemoAdapter(List<DemoModel> modelData, RecyclerViewOnItemTouchListener recyclerViewOnItemTouchListener) {
         if (modelData == null) {
             throw new IllegalArgumentException("modelData must not be null");
         }
         items = modelData;
+        this.recyclerViewOnItemTouchListener = recyclerViewOnItemTouchListener;
         selectedItems = new SparseBooleanArray();
     }
 
@@ -32,6 +35,14 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         View itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.item_demo_01, parent, false);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerViewOnItemTouchListener.onClick(view);
+            }
+        });
+
         return new ListItemViewHolder(itemView);
     }
 
