@@ -67,6 +67,11 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         }
     }
 
+    public void customNotify() {
+        android.util.Log.i("CHEOK", "customNotify");
+        adapter.notifyDataSetChanged();
+    }
+
     private void updateTitle(int idx) {
         int count = adapter.getSelectedItemCount();
         if (count <= 0) {

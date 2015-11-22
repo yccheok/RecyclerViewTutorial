@@ -101,7 +101,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
     public void clearSelections() {
         selectedItems.clear();
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     public int getSelectedItemCount() {
