@@ -20,10 +20,9 @@ import java.util.List;
 /**
  * Created by yccheok on 16/11/2015.
  */
-public class MainFragment extends Fragment implements RecyclerViewOnItemTouchListener.OnItemClickListener {
+public class MainFragment extends Fragment implements RecyclerViewOnItemClickListener {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private RecyclerViewOnItemTouchListener recyclerViewOnItemTouchListener;
     private ActionMode actionMode;
     private RecyclerViewDemoAdapter adapter;
 
@@ -42,12 +41,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        recyclerViewOnItemTouchListener = new RecyclerViewOnItemTouchListener(this.getContext(), this);
-
-        adapter = new RecyclerViewDemoAdapter(getDemoData(), recyclerViewOnItemTouchListener);
+        adapter = new RecyclerViewDemoAdapter(getDemoData(), mRecyclerView, this);
         mRecyclerView.setAdapter(adapter);
-
-        mRecyclerView.addOnItemTouchListener(recyclerViewOnItemTouchListener);
 
         return view;
     }
@@ -68,15 +63,15 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         if (actionMode == null) {
 
         } else {
-            myToggleSelection(position);
+            updateTitle(position);
         }
     }
 
-    private void myToggleSelection(int idx) {
-        adapter.toggleSelection(idx);
+    private void updateTitle(int idx) {
         int count = adapter.getSelectedItemCount();
         if (count <= 0) {
             actionMode.finish();
+            adapter.setActionMode(false);
             return;
         }
         String title = getString(R.string.selected_count, count);
@@ -90,7 +85,9 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         }
 
         actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(new AnActionModeOfEpicProportions());
-        myToggleSelection(position);
+        adapter.setActionMode(true);
+
+        updateTitle(position);
     }
 
     private final class AnActionModeOfEpicProportions implements ActionMode.Callback {
@@ -122,6 +119,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemTouchLis
         public void onDestroyActionMode(ActionMode mode) {
             MainFragment.this.actionMode = null;
             adapter.clearSelections();
+            adapter.setActionMode(false);
         }
     }
 }
