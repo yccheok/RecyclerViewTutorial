@@ -92,6 +92,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
 
     private final class AnActionModeOfEpicProportions implements ActionMode.Callback {
 
+        private boolean canCallNotify = true;
+
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
             MenuInflater inflater = actionMode.getMenuInflater();
@@ -108,7 +110,16 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.menu_delete:
+                    List<Integer> selectedItemPositions = adapter.getSelectedItems();
+                    for (int i = selectedItemPositions.size()-1; i >= 0; i--) {
+                        adapter.removeData(selectedItemPositions.get(i));
+                    }
+
+                    canCallNotify = false;
+
                     actionMode.finish();
+                    adapter.setActionMode(false);
+
                     return true;
                 default:
                     return false;
@@ -119,7 +130,14 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         public void onDestroyActionMode(ActionMode mode) {
             MainFragment.this.actionMode = null;
             adapter.clearSelections();
+            // http://stackoverflow.com/questions/27187733/no-animation-on-item-removal-on-recyclerview
+            if (canCallNotify) {
+                adapter.notifyDataSetChanged();
+            } else {
+                canCallNotify = true;
+            }
             adapter.setActionMode(false);
         }
     }
+
 }
