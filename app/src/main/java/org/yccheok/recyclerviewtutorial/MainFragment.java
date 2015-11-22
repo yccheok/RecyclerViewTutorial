@@ -125,6 +125,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
             MainFragment.this.actionMode = null;
             adapter.clearSelections();
             adapter.setActionMode(false);
+            adapter.notifyDataSetChanged();
         }
     }
 }
