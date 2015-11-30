@@ -162,7 +162,6 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
                 canCallNotify = true;
             }
             adapter.setActionMode(false);
-            adapter.notifyDataSetChanged();
         }
     }
 
