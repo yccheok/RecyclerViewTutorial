@@ -38,7 +38,7 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
 
     @Override
     public long getItemId( int position ) {
-        return position;
+        return this.items.get(position).getId();
     }
     
     @Override
