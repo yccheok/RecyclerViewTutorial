@@ -144,4 +144,9 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
     public void setActionMode(boolean actionMode) {
         this.actionMode = actionMode;
     }
+
+    public void removeData(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
 }
