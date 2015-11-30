@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.SimpleItemAnimator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         adapter = new RecyclerViewDemoAdapter(models, mRecyclerView, this);
         mRecyclerView.setAdapter(adapter);
 
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
         return view;
     }
 
@@ -70,12 +73,9 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         }
     }
 
-    public void customNotify() {
-        android.util.Log.i("CHEOK", "customNotify");
+    public void sortAndNotifyDataSetChanged() {
         int i0 = 0;
         int i1 = models.size() - 1;
-        //int i0 = 1;
-        //int i1 = 2;
 
         while (i0 < i1) {
             DemoModel o0 = models.get(i0);
