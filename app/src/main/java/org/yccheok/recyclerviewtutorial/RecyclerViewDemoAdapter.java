@@ -32,25 +32,32 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         this.recyclerView = recyclerView;
         this.recyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
         selectedItems = new SparseBooleanArray();
+
+        this.setHasStableIds(true);
     }
 
+    @Override
+    public long getItemId( int position ) {
+        return position;
+    }
+    
     @Override
     public ListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.item_demo_01, parent, false);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = recyclerView.getChildAdapterPosition(view);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = recyclerView.getChildAdapterPosition(view);
 
-                if (actionMode) {
-                    toggleSelection(position);
-                    itemView.setActivated(selectedItems.get(position, false));
-                }
+                    if (actionMode) {
+                        toggleSelection(position);
+                        itemView.setActivated(selectedItems.get(position, false));
+                    }
 
-                recyclerViewOnItemClickListener.onItemClick(view, position);
+                    recyclerViewOnItemClickListener.onItemClick(view, position);
             }
         });
 
