@@ -25,6 +25,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
     private LinearLayoutManager mLayoutManager;
     private ActionMode actionMode;
     private RecyclerViewDemoAdapter adapter;
+    private List<DemoModel> models;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +42,9 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        adapter = new RecyclerViewDemoAdapter(getDemoData(), mRecyclerView, this);
+        models = getDemoData();
+
+        adapter = new RecyclerViewDemoAdapter(models, mRecyclerView, this);
         mRecyclerView.setAdapter(adapter);
 
         return view;
@@ -69,6 +72,23 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
 
     public void customNotify() {
         android.util.Log.i("CHEOK", "customNotify");
+        int i0 = 0;
+        int i1 = models.size() - 1;
+        //int i0 = 1;
+        //int i1 = 2;
+
+        while (i0 < i1) {
+            DemoModel o0 = models.get(i0);
+            DemoModel o1 = models.get(i1);
+
+            models.set(i0, o1);
+            models.set(i1, o0);
+
+            i0++;
+            i1--;
+
+            //break;
+        }
         adapter.notifyDataSetChanged();
     }
 
