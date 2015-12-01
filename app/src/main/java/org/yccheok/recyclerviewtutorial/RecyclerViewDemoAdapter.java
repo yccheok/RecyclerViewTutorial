@@ -92,7 +92,24 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
                 DateUtils.FORMAT_ABBREV_ALL);
         holder.dateTime.setText(dateStr);
 
-        holder.itemView.setActivated(selectedItems.get(position, false));
+        if (selectedItems.get(position, false)) {
+            holder.itemView.setActivated(true);
+        } else {
+            final View itemView = holder.itemView;
+            if (itemView.isActivated()) {
+                itemView.setBackgroundResource(R.drawable.card);
+                itemView.setActivated(false);
+                itemView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemView.setBackgroundResource(R.drawable.statelist_item_background);
+                    }
+                });
+
+            } else {
+                itemView.setActivated(false);
+            }
+        }
     }
 
     private void toggleSelection(int pos) {
