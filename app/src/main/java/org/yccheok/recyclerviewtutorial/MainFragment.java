@@ -48,7 +48,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         adapter = new RecyclerViewDemoAdapter(models, mRecyclerView, this);
         mRecyclerView.setAdapter(adapter);
 
-        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
 
         return view;
     }
@@ -89,7 +89,18 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
 
             //break;
         }
+
+        // Prevent animation when sorting.
+        final RecyclerView.ItemAnimator animator = mRecyclerView.getItemAnimator();
+        mRecyclerView.setItemAnimator(null);
         adapter.notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.setItemAnimator(animator);
+            }
+        });
+
     }
 
     private void updateTitle(int idx) {
