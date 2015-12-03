@@ -73,6 +73,14 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         }
     }
 
+    public void addAndNotifyItemInserted() {
+        DemoModel model = new DemoModel();
+        model.dateTime = new Date();
+        model.label = "Test Label No. " + models.size();
+        models.add(3, model);
+        adapter.notifyItemInserted(3);
+    }
+
     public void sortAndNotifyDataSetChanged() {
         int i0 = 0;
         int i1 = models.size() - 1;

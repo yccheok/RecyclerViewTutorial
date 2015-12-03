@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
                 this.mainFragment.sortAndNotifyDataSetChanged();
                 break;
 
+            case R.id.menu_add:
+                this.mainFragment.addAndNotifyItemInserted();
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
