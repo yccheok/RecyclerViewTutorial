@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v7.widget.SimpleItemAnimator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,7 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
     private LinearLayoutManager mLayoutManager;
     private ActionMode actionMode;
     private RecyclerViewDemoAdapter adapter;
+    private List<DemoModel> models;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,8 +43,12 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         mLayoutManager = new LinearLayoutManager(this.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        adapter = new RecyclerViewDemoAdapter(getDemoData(), mRecyclerView, this);
+        models = getDemoData();
+
+        adapter = new RecyclerViewDemoAdapter(models, mRecyclerView, this);
         mRecyclerView.setAdapter(adapter);
+
+        mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
 
         return view;
     }
@@ -65,6 +71,44 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         } else {
             updateTitle(position);
         }
+    }
+
+    public void addAndNotifyItemInserted() {
+        DemoModel model = new DemoModel();
+        model.dateTime = new Date();
+        model.label = "Test Label No. " + models.size();
+        models.add(3, model);
+        adapter.notifyItemInserted(3);
+    }
+
+    public void sortAndNotifyDataSetChanged() {
+        int i0 = 0;
+        int i1 = models.size() - 1;
+
+        while (i0 < i1) {
+            DemoModel o0 = models.get(i0);
+            DemoModel o1 = models.get(i1);
+
+            models.set(i0, o1);
+            models.set(i1, o0);
+
+            i0++;
+            i1--;
+
+            //break;
+        }
+
+        // Prevent animation when sorting.
+        final RecyclerView.ItemAnimator animator = mRecyclerView.getItemAnimator();
+        mRecyclerView.setItemAnimator(null);
+        adapter.notifyDataSetChanged();
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.setItemAnimator(animator);
+            }
+        });
+
     }
 
     private void updateTitle(int idx) {

@@ -32,25 +32,32 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
         this.recyclerView = recyclerView;
         this.recyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
         selectedItems = new SparseBooleanArray();
+
+        this.setHasStableIds(true);
     }
 
+    @Override
+    public long getItemId( int position ) {
+        return this.items.get(position).getId();
+    }
+    
     @Override
     public ListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.
                 from(parent.getContext()).
                 inflate(R.layout.item_demo_01, parent, false);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = recyclerView.getChildAdapterPosition(view);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = recyclerView.getChildAdapterPosition(view);
 
-                if (actionMode) {
-                    toggleSelection(position);
-                    itemView.setActivated(selectedItems.get(position, false));
-                }
+                    if (actionMode) {
+                        toggleSelection(position);
+                        itemView.setActivated(selectedItems.get(position, false));
+                    }
 
-                recyclerViewOnItemClickListener.onItemClick(view, position);
+                    recyclerViewOnItemClickListener.onItemClick(view, position);
             }
         });
 
@@ -85,7 +92,24 @@ public class RecyclerViewDemoAdapter extends RecyclerView.Adapter<RecyclerViewDe
                 DateUtils.FORMAT_ABBREV_ALL);
         holder.dateTime.setText(dateStr);
 
-        holder.itemView.setActivated(selectedItems.get(position, false));
+        if (selectedItems.get(position, false)) {
+            holder.itemView.setActivated(true);
+        } else {
+            final View itemView = holder.itemView;
+            if (itemView.isActivated()) {
+                itemView.setBackgroundResource(R.drawable.card);
+                itemView.setActivated(false);
+                itemView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemView.setBackgroundResource(R.drawable.statelist_item_background);
+                    }
+                });
+
+            } else {
+                itemView.setActivated(false);
+            }
+        }
     }
 
     private void toggleSelection(int pos) {
