@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class MainFragment extends Fragment implements RecyclerViewOnItemClickListener {
     private RecyclerView mRecyclerView;
+    private View emptyView;
+
     private LinearLayoutManager mLayoutManager;
     private ActionMode actionMode;
     private RecyclerViewDemoAdapter adapter;
@@ -34,6 +36,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+
+        emptyView = view.findViewById(android.R.id.empty);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -50,17 +54,21 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
 
         mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 10);
 
+        updateEmptyView();
+
         return view;
     }
 
     private final List<DemoModel> getDemoData() {
         List<DemoModel> demoData = new ArrayList<DemoModel>();
+        /*
         for (int i = 0; i < 20; i++) {
             DemoModel model = new DemoModel();
             model.dateTime = new Date();
             model.label = "Test Label No. " + i;
             demoData.add(model);
         }
+        */
         return new ArrayList<DemoModel>(demoData);
     }
 
@@ -77,8 +85,9 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         DemoModel model = new DemoModel();
         model.dateTime = new Date();
         model.label = "Test Label No. " + models.size();
-        models.add(3, model);
-        adapter.notifyItemInserted(3);
+        models.add(0, model);
+        adapter.notifyItemInserted(0);
+        updateEmptyView();
     }
 
     public void sortAndNotifyDataSetChanged() {
@@ -164,6 +173,8 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
                     actionMode.finish();
                     adapter.setActionMode(false);
 
+                    updateEmptyView();
+
                     return true;
                 default:
                     return false;
@@ -184,4 +195,20 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
         }
     }
 
+    private void updateEmptyView() {
+        mRecyclerView.post(new Runnable() {
+
+            @Override
+            public void run() {
+                if (adapter.getItemCount() > 0) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                } else {
+                    // Don't use GONE, so that it has chance to finish remove animation.
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                    emptyView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
 }
