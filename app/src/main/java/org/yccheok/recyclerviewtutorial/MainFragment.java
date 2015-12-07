@@ -61,14 +61,14 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
 
     private final List<DemoModel> getDemoData() {
         List<DemoModel> demoData = new ArrayList<DemoModel>();
-        /*
+
         for (int i = 0; i < 20; i++) {
             DemoModel model = new DemoModel();
             model.dateTime = new Date();
             model.label = "Test Label No. " + i;
             demoData.add(model);
         }
-        */
+
         return new ArrayList<DemoModel>(demoData);
     }
 
@@ -82,12 +82,23 @@ public class MainFragment extends Fragment implements RecyclerViewOnItemClickLis
     }
 
     public void addAndNotifyItemInserted() {
-        DemoModel model = new DemoModel();
-        model.dateTime = new Date();
-        model.label = "Test Label No. " + models.size();
-        models.add(0, model);
-        adapter.notifyItemInserted(0);
-        updateEmptyView();
+        // Scroll first to avoid long animation.
+        ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(11, 0);
+
+        mRecyclerView.post(new Runnable() {
+
+            @Override
+            public void run() {
+                DemoModel model = new DemoModel();
+                model.dateTime = new Date();
+                model.label = "Test Label No. " + models.size();
+                models.add(11, model);
+                adapter.notifyItemInserted(11);
+                updateEmptyView();
+                // Is OK to have some animation.
+                ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(11, 0);
+            }
+        });
     }
 
     public void sortAndNotifyDataSetChanged() {
