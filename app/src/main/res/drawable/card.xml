@@ -2,6 +2,7 @@
     <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffededed" />
@@ -12,6 +13,7 @@
     <item>
         <shape>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffe8e8e8" />
@@ -22,6 +24,7 @@
     <item>
         <shape>
             <padding android:top="0dp" android:right="1dp" android:bottom="1dp" android:left="1dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffe1e1e1" />
@@ -32,6 +35,7 @@
     <item>
         <shape>
             <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffdbdbdb" />
@@ -42,6 +46,7 @@
     <item>
         <shape>
             <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffd5d5d5" />
@@ -53,6 +58,7 @@
     <item>
         <shape>
             <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="1dp"
                 android:color="#ffcfcfcf" />
